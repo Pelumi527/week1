@@ -27,4 +27,15 @@ snarkjs zkey export verificationkey _plonkMultiplier3/circuit_final.zkey _plonkM
 
 snarkjs zkey export solidityverifier _plonkMultiplier3/circuit_final.zkey ../_plonkMultiplier3.sol
 
+#generate witness
+node "_plonkMultiplier3/Multiplier3_js/generate_witness.js" _plonkMultiplier3/Multiplier3_js/Multiplier3.wasm input.json _plonkMultiplier3/witness.wtns
+
+# generate proof
+snarkjs plonk prove _plonkMultiplier3/circuit_final.zkey _plonkMultiplier3/witness.wtns _plonkMultiplier3/proof.json _plonkMultiplier3/public.json
+
+# verify proof
+snarkjs plonk verify _plonkMultiplier3/verification_key.json _plonkMultiplier3/public.json _plonkMultiplier3/proof.json
+
+# generate call
+snarkjs zkey export soliditycalldata _plonkMultiplier3/public.json _plonkMultiplier3/proof.json > _plonkMultiplier3/call.txt
 cd ../..

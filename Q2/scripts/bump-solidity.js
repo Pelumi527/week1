@@ -15,3 +15,9 @@ let bumped2 = content2.replace(solidityRegex, 'pragma solidity ^0.8.0');
 bumped2 = bumped2.replace(verifierRegex, 'contract Multiplier3');
 
 fs.writeFileSync("./contracts/Multiplier3.sol", bumped2);
+
+let content3= fs.readFileSync("./contracts/_plonkMultiplier3.sol", {encoding: 'utf-8'}) ;
+let bumped3 = content3.replace(solidityRegex, 'pragma solidity ^0.8.0');
+bumped3 = bumped3.replace(verifierRegex, 'contract PlonkVerifier');
+
+fs.writeFileSync("./contracts/_plonkMultiplier3.sol", bumped3);
