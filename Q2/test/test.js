@@ -36,8 +36,9 @@ describe("HelloWorld", function () {
     it("Should return true for correct proof", async function () {
         //[assignment] Add comments to explain what each line is doing
         const { proof, publicSignals } = await groth16.fullProve({"a":"1","b":"2"}, "contracts/circuits/HelloWorld/HelloWorld_js/HelloWorld.wasm","contracts/circuits/HelloWorld/circuit_final.zkey");
-
+        // we are passing the input signal a, b we would like to prove
         console.log('1x2 =',publicSignals[0]);
+
 
         const editedPublicSignals = unstringifyBigInts(publicSignals);
         const editedProof = unstringifyBigInts(proof);
@@ -65,11 +66,21 @@ describe("HelloWorld", function () {
 describe("Multiplier3 with Groth16", function () {
 
     beforeEach(async function () {
-        //[assignment] insert your script here
+        Verifier = await ethers.getContractFactory("Multiplier3");
+        verifier = await Verifier.deploy();
+        await verifier.deployed();
     });
 
     it("Should return true for correct proof", async function () {
         //[assignment] insert your script here
+        const {proof, publicSignals} = await groth16.fullProve({"a":"2","b":"3","c":"1"}, "contracts/circuits/Multiplier3/Multiplier3_js/Multiplier.wasm", "contracts/circuits/Multiplier3/circuit_final.zkey")
+        console,log('2x3x1 =', publicSignals[0])
+
+        const editedPublicSignals = unstringifyBigInts(publicSignals)
+        const editedProof = unstringifyBigInts(proof)
+        const calldata = await groth16.exportSolidityCallData(editedProof, editedPublicSignals)
+        const argv = calldata.replace(/["[\]\s]/g, "").split(',').map(x => BigInt(x).toString());
+        console.log(argv)
     });
     it("Should return false for invalid proof", async function () {
         //[assignment] insert your script here
